@@ -34,6 +34,7 @@
   }
 
   .stage{
+    position:relative;           /* para posicionar el botón encima de la carta */
     width:min(92vw,460px);
     perspective:1000px;
     text-align:center;
@@ -155,22 +156,27 @@
   }
   @keyframes blink { 50% { opacity:0 } }
 
-  /* Botón de música */
+  /* Botón de música centrado encima de la carta */
   .musicBtn{
-    position:fixed;
-    right:16px;
-    bottom:16px;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%, -50%);
     border:0;
-    padding:12px 14px;
-    font-size:20px;
+    padding:16px 18px;
+    font-size:24px;
     border-radius:50%;
     background:#fff;
     cursor:pointer;
-    box-shadow:0 6px 18px rgba(0,0,0,0.18);
-    z-index:15;
-    transition:transform .2s;
+    box-shadow:0 6px 18px rgba(0,0,0,0.25);
+    z-index:20;
+    transition:opacity .4s ease, transform .2s ease;
+    opacity:1;
   }
-  .musicBtn:hover{ transform:scale(1.1); }
+  .musicBtn:hover{ transform:translate(-50%, -50%) scale(1.1); }
+
+  /* Oculto inicialmente hasta que termine el texto */
+  .hidden{ opacity:0; pointer-events:none; }
 
   /* Móvil vertical */
   @media (max-width:480px){
@@ -189,12 +195,13 @@
         <div class="paper-lines"><span id="typed"></span><span id="cursor" class="typed-cursor"></span></div>
       </div>
     </div>
-    <div class="message-wrap" id="messageWrap" aria-live="polite"></div>
-  </div>
 
-  <!-- Botón de música + audio -->
-  <button id="musicBtn" class="musicBtn" aria-label="Reproducir música" title="Música">🎶</button>
-  <audio id="bgm" src="dos.mp3" preload="auto" loop></audio>
+    <div class="message-wrap" id="messageWrap" aria-live="polite"></div>
+
+    <!-- Botón de música (inicialmente oculto) + audio -->
+    <button id="musicBtn" class="musicBtn hidden" aria-label="Reproducir música" title="Música">🎶</button>
+    <audio id="bgm" src="dos.mp3" preload="auto" loop></audio>
+  </div>
 
 <script>
   const message = `Buenoooos Diaaaas :)
@@ -204,7 +211,7 @@ yendo a las maquinitas, con tus amigos, peleando con profes, en
 todo que te vaya requetebien                            
 
 
-🌟Lindo dia hoy y siempre🌟
+🌟Lindo dia hoy y siempre 🌟
 
 No se te olvide siempre apreciar todo todito
 Siempre bailando por la vida.
@@ -236,6 +243,10 @@ Siempre bailando por la vida.
   function revealMessageOutside(text){
     messageWrap.innerHTML = `<div class="message">${text}</div>`;
     setTimeout(()=> messageWrap.classList.add('show-message'), 150);
+
+    // Mostrar el botón de música cuando termina el texto
+    const musicBtn = document.getElementById('musicBtn');
+    musicBtn.classList.remove('hidden');
   }
 
   function openLetter(){
