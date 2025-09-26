@@ -175,7 +175,7 @@
   }
   .musicBtn:hover{ transform:translate(-50%, -50%) scale(1.1); }
 
-  /* Oculto inicialmente hasta que termine el texto */
+  /* Oculto inicialmente hasta que termine el texto / para desvanecer luego */
   .hidden{ opacity:0; pointer-events:none; }
 
   /* Móvil vertical */
@@ -208,7 +208,7 @@
 
 Muchissiisisma suerte en tu dia, en tus clases, en tu trabajo,
 yendo a las maquinitas, con tus amigos, peleando con profes, en
-todo que te vaya requetebien                            
+todo que te vayaa requetebien                            
 
 
 🌟Lindo dia hoy y siempre 🌟
@@ -273,7 +273,7 @@ Siempre bailando por la vida.
     typeIn(typedSpan, message, 0, ()=> revealMessageOutside(message));
   }
 
-  /* ====== Control de música ====== */
+  /* ====== Control de música con desvanecimiento al iniciar ====== */
   (function music(){
     const btn = document.getElementById('musicBtn');
     const audio = document.getElementById('bgm');
@@ -286,13 +286,16 @@ Siempre bailando por la vida.
         if(!playing){
           await audio.play();        // requiere interacción del usuario (este click)
           playing = true;
-          btn.textContent = '⏸️';    // cambia a icono de pausa
+          btn.textContent = '⏸️';    // (opcional, apenas se verá)
           btn.setAttribute('aria-label','Pausar música');
           btn.title = 'Pausar';
+          // Desvanecer el botón inmediatamente (o prueba con 500ms de delay)
+          setTimeout(()=> btn.classList.add('hidden'), 200);
         } else {
+          // (Si quisieras que el botón quedara visible para pausar, no lo ocultes)
           audio.pause();
           playing = false;
-          btn.textContent = '🎶';    // icono de música
+          btn.textContent = '🎶';
           btn.setAttribute('aria-label','Reproducir música');
           btn.title = 'Música';
         }
