@@ -5,305 +5,213 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&family=Parisienne&display=swap" rel="stylesheet">
-
-<title>Carta animada</title>
+<title>Carta animada + botón de música fijo + imagen</title>
 <style>
-  :root{
-    --bg:#f6f7fb;
-    --envelope:#e74c3c;
-    --paper:#fff;
-    --text:#222;
-    --shadow: rgba(0,0,0,0.12);
-  }
+  :root{ --bg:#f6f7fb; --envelope:#e74c3c; --paper:#fff; --text:#222; --shadow: rgba(0,0,0,0.12); }
   html,body{height:100%;margin:0; font-family: Quicksand, system-ui, -apple-system, Segoe UI, Roboto, Arial;}
   body{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:16px;
-
-    /* Fondo animado */
+    display:flex; align-items:center; justify-content:center; padding:16px;
     background: linear-gradient(120deg, #ffe7ec, #eef2ff, #e7fff4);
-    background-size: 300% 300%;
-    animation: bgShift 18s ease infinite;
+    background-size: 300% 300%; animation: bgShift 18s ease infinite;
   }
-  @keyframes bgShift{
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
-  }
+  @keyframes bgShift{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-  .stage{
-    position:relative;           /* para posicionar el botón encima de la carta */
-    width:min(92vw,460px);
-    perspective:1000px;
-    text-align:center;
-  }
-
-  /* Mantener proporción en todos los dispositivos */
-  .envelope{
-    position:relative;
-    width:100%;
-    aspect-ratio: 16 / 10;
-    transform-style:preserve-3d;
-  }
-
-  .env-body{
-    position:absolute;
-    inset:0;
-    background:var(--envelope);
-    border-radius:10px;
-    box-shadow:0 12px 30px var(--shadow), inset 0 -6px rgba(0,0,0,0.08);
-    overflow:visible;
-    z-index:1;
-  }
-
+  .stage{ position:relative; width:min(92vw,460px); perspective:1000px; text-align:center; }
+  .envelope{ position:relative; width:100%; aspect-ratio:16/10; transform-style:preserve-3d; transform: translateZ(0); }
+  .env-body{ position:absolute; inset:0; background:var(--envelope); border-radius:10px; box-shadow:0 12px 30px var(--shadow), inset 0 -6px rgba(0,0,0,0.08); z-index:1; }
   .env-flap{
-    position:absolute;
-    left:0; right:0; top:0;
-    height:50%;
+    position:absolute; left:0; right:0; top:0; height:50%;
     background:linear-gradient(180deg,#ff6b6b,var(--envelope));
-    transform-origin:top center;
-    transform:rotateX(0deg) translateZ(0);
-    border-bottom-left-radius:10px;
-    border-bottom-right-radius:10px;
-    box-shadow:0 8px 18px rgba(0,0,0,0.14);
-    z-index:3;
-    backface-visibility:hidden;
-    will-change: transform;
+    transform-origin:top center; transform:rotateX(0deg) translateZ(0);
+    border-bottom-left-radius:10px; border-bottom-right-radius:10px;
+    box-shadow:0 8px 18px rgba(0,0,0,0.14); z-index:3; backface-visibility:hidden; will-change:transform;
   }
   .env-flap:before{
-    content:"";
-    position:absolute;
-    left:50%; top:50%;
-    width:210%; height:210%;
-    background:rgba(255,255,255,0.06);
-    transform:translate(-50%,-50%) rotate(45deg);
-    filter:blur(2px);
-    opacity:0.08;
-    pointer-events:none;
+    content:""; position:absolute; left:50%; top:50%; width:210%; height:210%;
+    background:rgba(255,255,255,0.06); transform:translate(-50%, -50%) rotate(45deg);
+    filter:blur(2px); opacity:0.08; pointer-events:none;
   }
-
   .letter{
-    position:absolute;
-    left:8%; right:8%;
-    top:24%; bottom:8%;
-    background:var(--paper);
-    border-radius:8px;
-    box-shadow:0 8px 20px rgba(0,0,0,0.12);
-    transform-origin:top center;
-    transform:translateY(0) scale(0.98) translateZ(0);
-    z-index:2;
-    padding:28px 20px;
-    display:flex;
-    align-items:flex-start;
-    justify-content:center;
-    overflow:hidden;
-    will-change: transform;
-    background:
-      repeating-linear-gradient(0deg, rgba(0,0,0,.03) 0 1px, transparent 1px 28px),
-      radial-gradient(120% 100% at 50% 0%, #ffffff, #fafbff);
+    position:absolute; left:8%; right:8%; top:24%; bottom:8%; background:var(--paper); border-radius:8px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.12); transform-origin:top center; transform:translateY(0) scale(0.98) translateZ(0);
+    z-index:2; padding:28px 20px; display:flex; align-items:flex-start; justify-content:center; overflow:hidden; will-change:transform;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,.03) 0 1px, transparent 1px 28px), radial-gradient(120% 100% at 50% 0%, #ffffff, #fafbff);
+  }
+  .paper-lines{ width:100%; height:100%; color:var(--text); font-size:16px; line-height:1.4; white-space:pre-wrap; }
+
+  /* Animaciones suaves */
+  @keyframes flapOpen{
+    0%   { transform: rotateX(0deg); }
+    55%  { transform: rotateX(-95deg); }
+    82%  { transform: rotateX(-158deg); }
+    100% { transform: rotateX(-150deg); }
+  }
+  @keyframes letterRise{
+    0%   { transform: translateY(0) scale(0.98); }
+    50%  { transform: translateY(-18%) scale(1); }
+    100% { transform: translateY(-40%) scale(1.02); }
+  }
+  .animate .env-flap{ animation: flapOpen 1.25s cubic-bezier(.2,.65,.2,1) forwards; }
+  .animate .letter{   animation: letterRise 1.1s cubic-bezier(.2,.65,.2,1) 1.0s forwards; }
+
+  /* Barra de tiempo */
+  .timebar{
+    margin-top:16px; display:inline-flex; gap:10px; align-items:center; padding:8px 14px;
+    font-size:14px; color:var(--text); background:rgba(255,255,255,0.9); border-radius:999px; box-shadow:0 6px 18px var(--shadow);
   }
 
-  .paper-lines{
-    width:100%;
-    height:100%;
-    color:var(--text);
-    font-size:16px;
-    line-height:1.4;
-  }
-
-  /* Animaciones */
-  @keyframes flapOpen {
-    0% { transform: rotateX(0deg) translateZ(0); }
-    60% { transform: rotateX(-100deg) translateZ(0); }
-    100% { transform: rotateX(-120deg) translateZ(0); }
-  }
-  @keyframes letterRise {
-    0% { transform: translateY(0) scale(0.98) translateZ(0); }
-    60% { transform: translateY(-24%) scale(1.00) translateZ(0); }
-    100% { transform: translateY(-40%) scale(1.02) translateZ(0); }
-  }
-
-  .animate .env-flap{
-    animation: flapOpen 1.1s ease-in-out forwards;
-  }
-  .animate .letter{
-    animation: letterRise 0.9s ease-in-out 0.6s forwards;
-  }
-
-  .message-wrap{
-    margin-top:16px;
-    min-height:120px;
-  }
-  .message{
-    white-space:pre-wrap;
-    font-size:16px;
-    color:var(--text);
-    opacity:0;
-    transition:opacity .35s ease .05s;
-  }
-  .show-message .message{ opacity:1; }
-
-  .typed-cursor{
-    display:inline-block;
-    width:10px;
-    background:var(--text);
-    margin-left:4px;
-    animation: blink 1s steps(1) infinite;
-    vertical-align:bottom;
-    height:1em;
-  }
-  @keyframes blink { 50% { opacity:0 } }
-
-  /* Botón de música centrado encima de la carta */
+  /* Botón de música FIJO */
+  .musicWrap{ margin-top:12px; }
   .musicBtn{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%, -50%);
-    border:0;
-    padding:16px 18px;
-    font-size:24px;
-    border-radius:50%;
-    background:#fff;
-    cursor:pointer;
-    box-shadow:0 6px 18px rgba(0,0,0,0.25);
-    z-index:20;
-    transition:opacity .4s ease, transform .2s ease;
-    opacity:1;
+    display:inline-flex; align-items:center; gap:8px;
+    border:0; padding:10px 14px; font-size:16px; font-weight:600;
+    border-radius:999px; background:#ffffff; color:#111; cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,0.15);
   }
-  .musicBtn:hover{ transform:translate(-50%, -50%) scale(1.1); }
+  .musicBtn:focus{ outline:2px solid #000; outline-offset:2px; }
 
-  /* Oculto inicialmente hasta que termine el texto / para desvanecer luego */
-  .hidden{ opacity:0; pointer-events:none; }
+  /* Imagen debajo del botón */
+  .imageWrap{ margin-top:12px; }
+  .imageWrap img{
+    width:100%; height:auto; display:block;
+    border-radius:12px; box-shadow:0 6px 18px rgba(0,0,0,0.15);
+  }
 
-  /* Móvil vertical */
   @media (max-width:480px){
     .stage{ width:min(94vw,420px); }
     .letter{ padding:20px 14px; }
     .paper-lines{ font-size:14px; }
+    .timebar{ font-size:13px; }
   }
 </style>
 </head>
 <body>
   <div class="stage">
-    <div id="envelope" class="envelope">
+    <!-- SOBRE + CARTA (con animación de apertura restaurada) -->
+    <div id="envelope" class="envelope" aria-label="Carta animada">
       <div class="env-body"></div>
       <div class="env-flap"></div>
       <div class="letter">
-        <div class="paper-lines"><span id="typed"></span><span id="cursor" class="typed-cursor"></span></div>
+        <div class="paper-lines" id="paper"></div>
       </div>
     </div>
 
-    <div class="message-wrap" id="messageWrap" aria-live="polite"></div>
+    <!-- Fecha y hora actuales de CDMX -->
+    <div class="timebar" id="timebar" role="status" aria-live="polite">
+      <span id="cdmxTime">Lindo Dia Pil ❤️ —</span>
+    </div>
 
-    <!-- Botón de música (inicialmente oculto) + audio -->
-    <button id="musicBtn" class="musicBtn hidden" aria-label="Reproducir música" title="Música">🎶</button>
-    <audio id="bgm" src="dos.mp3" preload="auto" loop></audio>
+    <!-- Botón de música FIJO -->
+    <div class="musicWrap">
+      <button id="musicBtn" class="musicBtn" aria-label="Reproducir música" title="Reproducir música">
+        🎶 <span id="musicLabel">Reproducir</span>
+      </button>
+      <audio id="bgm" src="tres.mp3" preload="auto" loop></audio>
+    </div>
+
+    <!-- Imagen debajo del botón -->
+    <div class="imageWrap">
+      <img id="img1" src="img1.jpg" alt="Imagen img1" loading="lazy">
+    </div>
   </div>
 
 <script>
-  const message = `Buenoooos Diaaaas :)
+  // ===== Config =====
+  const TIMEZONE = 'America/Mexico_City';
+  const FORCE_ANIMATIONS = true; // pon en false si quieres respetar "reducir movimiento" del sistema
 
-Muchissiisisma suerte en tu dia, en tus clases, en tu trabajo,
-yendo a las maquinitas, con tus amigos, peleando con profes, en
-todo que te vayaa requetebien                            
-
-
-🌟Lindo dia hoy y siempre 🌟
-
-No se te olvide siempre apreciar todo todito
-Siempre bailando por la vida.
-`;
-
+  // ===== Animación de apertura (solapa + carta) =====
   const envelope = document.getElementById('envelope');
-  const typedSpan = document.getElementById('typed');
-  const cursor = document.getElementById('cursor');
-  const messageWrap = document.getElementById('messageWrap');
+  const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  function typeIn(element, text, speed = 20, done){
-    typedSpan.textContent = '';
-    let i = 0;
-    function step(){
-      if(i <= text.length){
-        typedSpan.textContent = text.slice(0, i);
-        if(i === text.length){
-          cursor.style.display = 'none';
-          if(done) done();
-          return;
-        }
-        i++;
-        setTimeout(step, speed);
-      }
-    }
-    step();
-  }
-
-  function revealMessageOutside(text){
-    messageWrap.innerHTML = `<div class="message">${text}</div>`;
-    setTimeout(()=> messageWrap.classList.add('show-message'), 150);
-
-    // Mostrar el botón de música cuando termina el texto
-    const musicBtn = document.getElementById('musicBtn');
-    musicBtn.classList.remove('hidden');
-  }
-
-  function openLetter(){
-    // Forzar un reflow antes de añadir la clase (asegura que la animación siempre arranque)
-    envelope.offsetHeight;
-    envelope.classList.add('animate');
-    // Iniciar tipiado cuando la carta ya “salió”
-    setTimeout(()=>{
-      typeIn(typedSpan, message, 20, ()=> revealMessageOutside(message));
-    }, 1700);
-  }
-
-  // Disparo robusto: DOM listo -> rAF -> timeout
   document.addEventListener('DOMContentLoaded', () => {
-    requestAnimationFrame(() => {
-      setTimeout(openLetter, 400);
-    });
+    // Inicia reloj, música y mensaje
+    startClock();
+    initMusicBtn();
+    setMessage();
+
+    // Dispara la animación de apertura de la carta
+    if (FORCE_ANIMATIONS || !prefersReducedMotion) {
+      // Asegura reflow para que la animación no se corte
+      void envelope.offsetHeight;
+      setTimeout(() => envelope.classList.add('animate'), 350);
+    }
   });
 
-  // Accesibilidad: si el usuario prefiere reducir movimiento, salta animaciones
-  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (mq.matches) {
-    envelope.classList.add('animate');
-    typeIn(typedSpan, message, 0, ()=> revealMessageOutside(message));
+  // ===== Reloj CDMX =====
+  const cdmxEl = document.getElementById('cdmxTime');
+
+  function formatCDMXDateTime(date){
+    const dateParts = new Intl.DateTimeFormat('es-MX', {
+      timeZone: TIMEZONE,
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    }).formatToParts(date);
+
+    const get = (t) => dateParts.find(p => p.type === t)?.value || '';
+    const day = get('day');
+    const month = get('month');
+    const year = get('year');
+    const fecha = `${day} de ${month} del ${year}`;
+
+    const hora = new Intl.DateTimeFormat('es-MX', {
+      timeZone: TIMEZONE,
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false
+    }).format(date);
+
+    return `${fecha} · ${hora}`;
   }
 
-  /* ====== Control de música con desvanecimiento al iniciar ====== */
-  (function music(){
-    const btn = document.getElementById('musicBtn');
-    const audio = document.getElementById('bgm');
-    if(!btn || !audio) return;
+  function tick(){
+    const now = new Date();
+    cdmxEl.textContent = `Lindo Dia Pil ❤️ · ${formatCDMXDateTime(now)}`;
+  }
 
+  function startClock(){
+    tick();
+    setInterval(tick, 1000);
+  }
+
+  // ===== Música (play/pause) =====
+  function initMusicBtn(){
+    const btn = document.getElementById('musicBtn');
+    const label = document.getElementById('musicLabel');
+    const audio = document.getElementById('bgm');
     let playing = false;
 
-    btn.addEventListener('click', async ()=>{
+    btn.addEventListener('click', async () => {
       try{
         if(!playing){
-          await audio.play();        // requiere interacción del usuario (este click)
+          await audio.play();
           playing = true;
-          btn.textContent = '⏸️';    // (opcional, apenas se verá)
+          label.textContent = 'Pausar';
           btn.setAttribute('aria-label','Pausar música');
-          btn.title = 'Pausar';
-          // Desvanecer el botón inmediatamente (o prueba con 500ms de delay)
-          setTimeout(()=> btn.classList.add('hidden'), 200);
+          btn.title = 'Pausar música';
         } else {
-          // (Si quisieras que el botón quedara visible para pausar, no lo ocultes)
           audio.pause();
           playing = false;
-          btn.textContent = '🎶';
+          label.textContent = 'Reproducir';
           btn.setAttribute('aria-label','Reproducir música');
-          btn.title = 'Música';
+          btn.title = 'Reproducir música';
         }
       }catch(e){
-        console.log("Error al reproducir música:", e);
+        console.log('No se pudo reproducir la música:', e);
       }
     });
-  })();
+  }
+
+  // ===== Texto desde JS (edítalo a tu gusto) =====
+  function setMessage(){
+    const mensaje = `Buenossss Diaaas
+
+    Suerteeeeeeeeeeeeeeee en tu dia
+    Hoy sera maravilloso, y que te vaya 
+    muuuy bien en el concierto✨
+    Lindo dia.`;
+    document.getElementById('paper').textContent = mensaje; // seguro (sin HTML)
+  }
 </script>
 </body>
 </html>
