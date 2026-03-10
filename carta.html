@@ -49,7 +49,7 @@
   @keyframes letterRise{
     0%   { transform: translateY(0) scale(0.98); }
     50%  { transform: translateY(-18%) scale(1); }
-    100% { transform: translateY(-40%) scale(1.02); }
+    100% { transform: translateY(-40%) scale(1.02); } 
   }
   .animate .env-flap{ animation: flapOpen 1.25s cubic-bezier(.2,.65,.2,1) forwards; }
   .animate .letter{   animation: letterRise 1.1s cubic-bezier(.2,.65,.2,1) 1.0s forwards; }
@@ -166,7 +166,7 @@
 
   function tick(){
     const now = new Date();
-    cdmxEl.textContent = `Lindo Dia Pil ❤️ · ${formatCDMXDateTime(now)}`;
+    cdmxEl.textContent = `Buenos Dias Angelita ❤️ · ${formatCDMXDateTime(now)}`;
   }
 
   function startClock(){
@@ -206,12 +206,14 @@
   function setMessage(){
     const mensaje = `Buenossss Diaaas
 
-    Suerteeeeeeeeeeeeeeee en tu dia
-    Hoy sera maravilloso, y que te vaya 
-    muuuy bien en el concierto✨
+    Feliz Cumpleaños :)
+Se que a lo mejor no es como hubieras querido, y no estás
+cerca de tu familia pero aún así disfrútalo, 
+se que lograrás cosas grandes e importantes, confío en ti.
     Lindo dia.`;
     document.getElementById('paper').textContent = mensaje; // seguro (sin HTML)
   }
 </script>
 </body>
 </html>
+
